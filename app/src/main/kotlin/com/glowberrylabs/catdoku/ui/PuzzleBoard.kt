@@ -223,9 +223,9 @@ private fun RegionLetter(letter: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(start = 4.dp, top = 2.dp)
             .clearAndSetSemantics { },
-        color = RegionPalette.ink.copy(alpha = 0.55f),
+        color = RegionPalette.ink.copy(alpha = 0.75f),
         style = MaterialTheme.typography.labelSmall.copy(
-            fontSize = 9.sp,
+            fontSize = 10.sp,
             fontWeight = FontWeight.Bold
         )
     )

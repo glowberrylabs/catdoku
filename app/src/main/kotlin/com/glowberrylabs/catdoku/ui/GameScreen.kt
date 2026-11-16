@@ -27,11 +27,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -46,14 +43,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.glowberrylabs.catdoku.R
 import com.glowberrylabs.catdoku.game.PuzzleMode
@@ -95,9 +89,6 @@ fun GameScreen(uiState: PuzzleUiState, actions: GameActions, modifier: Modifier 
                 )
             }
         }
-        if (uiState.showPause) {
-            PauseOverlay(actions = actions)
-        }
     }
 }
 
@@ -106,7 +97,10 @@ private fun PortraitLayout(uiState: PuzzleUiState, puzzleState: PuzzleState, act
     Column(modifier = Modifier.fillMaxSize()) {
         GameHeader(puzzleState = puzzleState, onPause = actions.onPause)
         Spacer(modifier = Modifier.height(8.dp))
-        HintBanner(visible = puzzleState.hintCell != null)
+        HintBanner(
+            visible = puzzleState.hintCell != null,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
         Spacer(modifier = Modifier.height(8.dp))
         BoardArea(
             uiState = uiState,
@@ -225,9 +219,10 @@ private fun Hearts(hearts: Int) {
 }
 
 @Composable
-private fun HintBanner(visible: Boolean) {
+private fun HintBanner(visible: Boolean, modifier: Modifier = Modifier) {
     AnimatedVisibility(
         visible = visible,
+        modifier = modifier,
         enter = fadeIn(animationSpec = tween(140)),
         exit = fadeOut(animationSpec = tween(120))
     ) {
@@ -341,63 +336,6 @@ private fun GameActionButton(icon: ImageVector, label: String, enabled: Boolean,
             style = MaterialTheme.typography.labelMedium,
             color = RegionPalette.muted
         )
-    }
-}
-
-@Composable
-private fun PauseOverlay(actions: GameActions) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(RegionPalette.scrim)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        awaitPointerEvent().changes.forEach { it.consume() }
-                    }
-                }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Surface(
-            shape = RoundedCornerShape(30.dp),
-            color = RegionPalette.surfaceRaised,
-            shadowElevation = 16.dp
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 28.dp, vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(18.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.paused),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Black,
-                    color = RegionPalette.ink,
-                    textAlign = TextAlign.Center
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                    GameActionButton(
-                        icon = Icons.Filled.PlayArrow,
-                        label = stringResource(R.string.resume),
-                        enabled = true,
-                        onClick = actions.onResume
-                    )
-                    GameActionButton(
-                        icon = Icons.Filled.Replay,
-                        label = stringResource(R.string.restart),
-                        enabled = true,
-                        onClick = actions.onRestart
-                    )
-                    GameActionButton(
-                        icon = Icons.Filled.Home,
-                        label = stringResource(R.string.quit_to_menu),
-                        enabled = true,
-                        onClick = actions.onQuitToMenu
-                    )
-                }
-            }
-        }
     }
 }
 
