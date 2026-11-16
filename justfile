@@ -34,6 +34,10 @@ emu-kill:
 logcat:
     adb logcat --pid=$(adb shell pidof {{ app_id }})
 
+# Regenerate the bundled puzzle pack
+puzzles:
+    python3 scripts/generate_puzzles.py
+
 # Run unit tests
 test:
     bash gradlew test
