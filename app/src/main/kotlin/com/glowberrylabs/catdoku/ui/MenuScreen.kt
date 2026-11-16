@@ -5,11 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -47,13 +49,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.glowberrylabs.catdoku.R
 import com.glowberrylabs.catdoku.game.PuzzleUiState
 
 @Composable
 fun MenuScreen(uiState: PuzzleUiState, actions: MenuActions, modifier: Modifier = Modifier) {
-    Box(
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
             .background(
@@ -63,21 +66,64 @@ fun MenuScreen(uiState: PuzzleUiState, actions: MenuActions, modifier: Modifier 
             )
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .widthIn(max = 420.dp)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            content = { MenuContent(uiState = uiState, actions = actions) }
-        )
+        if (maxWidth > maxHeight) {
+            LandscapeMenu(uiState = uiState, actions = actions)
+        } else {
+            PortraitMenu(
+                uiState = uiState,
+                actions = actions,
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }
 
 @Composable
-private fun MenuContent(uiState: PuzzleUiState, actions: MenuActions) {
+private fun PortraitMenu(uiState: PuzzleUiState, actions: MenuActions, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .widthIn(max = 420.dp)
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        MenuBrand(uiState = uiState, actions = actions, mascotSize = 156.dp)
+        MenuPanel(uiState = uiState, actions = actions)
+    }
+}
+
+@Composable
+private fun LandscapeMenu(uiState: PuzzleUiState, actions: MenuActions) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(32.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            MenuBrand(uiState = uiState, actions = actions, mascotSize = 112.dp)
+        }
+        Column(
+            modifier = Modifier
+                .widthIn(max = 380.dp)
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            MenuPanel(uiState = uiState, actions = actions)
+        }
+    }
+}
+
+@Composable
+private fun MenuBrand(uiState: PuzzleUiState, actions: MenuActions, mascotSize: Dp) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End
@@ -90,7 +136,7 @@ private fun MenuContent(uiState: PuzzleUiState, actions: MenuActions) {
             )
         }
     }
-    Mascot()
+    Mascot(size = mascotSize)
     Text(
         text = stringResource(R.string.app_name),
         style = MaterialTheme.typography.displaySmall,
@@ -101,9 +147,12 @@ private fun MenuContent(uiState: PuzzleUiState, actions: MenuActions) {
         style = MaterialTheme.typography.titleMedium,
         color = RegionPalette.muted
     )
-    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.height(20.dp))
     ProgressCard(uiState = uiState)
-    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@Composable
+private fun MenuPanel(uiState: PuzzleUiState, actions: MenuActions) {
     ContinueButton(uiState = uiState, onContinue = actions.onContinue)
     Spacer(modifier = Modifier.height(12.dp))
     DailyButton(uiState = uiState, onDaily = actions.onDaily)
@@ -129,17 +178,17 @@ private fun MenuContent(uiState: PuzzleUiState, actions: MenuActions) {
 }
 
 @Composable
-private fun Mascot() {
+private fun Mascot(size: Dp) {
     Box(
         modifier = Modifier
-            .size(156.dp)
+            .size(size)
             .background(RegionPalette.surfaceRaised.copy(alpha = 0.7f), CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = painterResource(R.drawable.ic_cat),
             contentDescription = null,
-            modifier = Modifier.size(132.dp)
+            modifier = Modifier.size(size * 0.85f)
         )
     }
 }
