@@ -12,3 +12,6 @@
 keystore.properties
 .env
 google-services.json
+
+__pycache__/
+*.pyc
