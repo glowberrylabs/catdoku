@@ -3,4 +3,29 @@
     <string name="app_name">Catdoku</string>
     <string name="tagline">A cozy cat logic puzzle</string>
     <string name="scaffold_ready">Scaffold ready</string>
+    <string name="level_label">Level %1$d</string>
+    <string name="daily_label">Daily puzzle</string>
+    <string name="board_size">%1$d x %2$d</string>
+    <string name="undo">Undo</string>
+    <string name="hint">Hint</string>
+    <string name="menu">Menu</string>
+    <string name="hint_banner">A cat belongs here</string>
+    <string name="toggle_note">Toggle X note</string>
+    <string name="place_cat">Place or remove cat</string>
+    <string name="cell_description">Row %1$d, column %2$d, region %3$s, %4$s</string>
+    <string name="cell_empty">empty</string>
+    <string name="cell_cat">cat</string>
+    <string name="cell_note">marked impossible</string>
+    <string name="cell_mistake">wrong guess</string>
+    <string name="cell_excluded">excluded</string>
+    <string name="paused">Paused</string>
+    <string name="resume">Resume</string>
+    <string name="restart">Restart</string>
+    <string name="quit_to_menu">Quit to menu</string>
+    <string name="continue_level">Continue</string>
+    <string name="daily_button">Daily puzzle</string>
+    <plurals name="hearts_description">
+        <item quantity="one">%1$d heart remaining</item>
+        <item quantity="other">%1$d hearts remaining</item>
+    </plurals>
 </resources>
