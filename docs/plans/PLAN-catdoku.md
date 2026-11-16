@@ -48,7 +48,8 @@
 
 - Board is N by N cells, with N from 4 through 8.
 - The board is divided into exactly N color regions.
-- Every region contains exactly N cells and is orthogonally connected.
+- Every region is orthogonally connected and contains at least one cell.
+  Region sizes may vary.
 - Exactly one cat belongs in every row, every column, and every region.
 - No two cats may touch in any of the eight directions: horizontal,
   vertical, or diagonal.
@@ -93,10 +94,13 @@
   - Generate a valid cat placement row by row. Each row chooses an unused
     column whose distance from the previous row's column is at least two.
   - Seed one region on each solution cell.
-  - Grow the regions one cell at a time into orthogonal neighbors.
-  - Prefer the smallest region when choosing which region grows. Retry when
-    a region becomes trapped before reaching N cells.
-  - Require every region to contain exactly N cells and to be connected.
+  - Grow the regions one cell at a time into orthogonal neighbors. Prefer the
+    smallest region when choosing which region grows. Region sizes may vary.
+  - Require every region to be non-empty and connected.
+  - Refine the region layout to a unique solution. Find an alternative
+    solution, then move one of its non-target cells into an adjacent region
+    without disconnecting the source region. Repeat until no alternative
+    solution exists.
   - Count all cat placements that satisfy the row, column, region, and
     spacing rules. Reject anything other than exactly one solution.
   - Run the logic solver from the empty board. Reject the puzzle if the
@@ -104,7 +108,7 @@
   - Record the ordered solution cells produced by the logic solver. This
     order becomes the hint path.
   - Assign a difficulty score from solver rounds, advanced deductions, and
-    candidate branching.
+    candidate eliminations.
 - The logic solver uses only deterministic deductions:
   - Naked single: a row, column, or region has only one candidate cell.
   - Hidden single: a cell is the only candidate in its row, column, or
@@ -113,6 +117,8 @@
     or one column.
   - Line-to-region confinement: all candidates in a row or column sit in
     one region.
+  - Adjacency locking: a cell adjacent to every candidate in a region cannot
+    hold a cat.
   - Small Hall sets: two or three regions confined to two or three rows or
     columns, and the matching row or column variant.
   - Adjacency elimination around placed cats.
@@ -140,7 +146,7 @@
   field is stored.
 - A hand-written `PuzzlePack` parser validates:
   - supported size range
-  - region count and region cell counts
+  - region count and non-empty region connectivity
   - region connectivity
   - hint path length, uniqueness, and bounds
   - solution row, column, region, and spacing constraints
@@ -387,7 +393,7 @@
 - Pack tests:
   - parse every level and daily record
   - supported sizes and correct record counts
-  - N regions, each with N cells, all connected
+  - N regions, each non-empty and connected
   - hint path contains N unique in-bounds cells
   - every solution satisfies row, column, region, and spacing rules
   - a test-only solver confirms every bundled puzzle has exactly one
