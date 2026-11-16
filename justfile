@@ -38,6 +38,10 @@ logcat:
 puzzles:
     python3 scripts/generate_puzzles.py
 
+# Regenerate the bundled sound effects
+sounds:
+    python3 scripts/make_sounds.py
+
 # Run unit tests
 test:
     bash gradlew test

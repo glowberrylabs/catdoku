@@ -13,6 +13,10 @@ naming:
     ignoreAnnotated:
       - "Composable"
 
+formatting:
+  ImportOrdering:
+    active: false
+
 style:
   MaxLineLength:
     maxLineLength: 120
