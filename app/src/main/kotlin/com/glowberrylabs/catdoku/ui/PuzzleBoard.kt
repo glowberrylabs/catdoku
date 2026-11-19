@@ -266,8 +266,8 @@ private fun NoteMark(mark: CellMark, isAutoMarked: Boolean) {
         XMark(
             color = when {
                 mark == CellMark.MISTAKE -> RegionPalette.coral
-                mark == CellMark.NOTE -> RegionPalette.ink.copy(alpha = 0.7f)
-                else -> RegionPalette.ink.copy(alpha = 0.28f)
+                mark == CellMark.NOTE -> RegionPalette.ink.copy(alpha = 0.9f)
+                else -> RegionPalette.ink.copy(alpha = 0.5f)
             },
             heavy = mark == CellMark.MISTAKE,
             modifier = Modifier.fillMaxSize(0.54f)
@@ -279,7 +279,7 @@ private fun NoteMark(mark: CellMark, isAutoMarked: Boolean) {
 private fun XMark(color: Color, heavy: Boolean, modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {
         val inset = size.minDimension * 0.2f
-        val stroke = size.minDimension * if (heavy) 0.12f else 0.08f
+        val stroke = size.minDimension * if (heavy) 0.12f else 0.10f
         drawLine(
             color = color,
             start = Offset(inset, inset),
